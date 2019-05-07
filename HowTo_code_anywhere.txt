@@ -1,0 +1,35 @@
+HOWTO for setting up a Cloud9 instance to run the CA-Tracing demo
+
+Follow https://community.c9.io/t/running-a-python-cgi-server/1602
+This includes:
+$ sudo a2enmod cgi
+$ sudo systemctl restart apache2
+
+You need to edit 
+
+$  sudo emacs /etc/apache2/conf-available/serve-cgi-bin.conf
+
+And change the defintions of ScriptAlias & Directory to refer to:
+
+  /home/cabox/workspace/curve-experiments/crvtrak/cgi-bin
+  
+You also need to add the following in the 
+last <IfDefine ENABLE_USR_LIB_CGI_BIN> clause:
+   AddHandler cgi-script .cgi .py
+
+Python scripts are in cgi-bin to facilitate running on servers that
+don't like cgi scripts mixed with HTML
+
+Also, use
+$ service apache2 restart
+When mods are made to CGI scripts
+
+$ sudo apt-get install python-opencv
+$ sudo ln /dev/null /dev/raw1394  # Disables camera API
+
+The second line avoids an error message upon "import cv2",
+but you can just ignore the error.
+
+Running URL is https://curvexp-saccade.c9users.io/c/
+(aka https://curvexp-saccade.c9users.io/curve-experiments/crvtrak/)
+
